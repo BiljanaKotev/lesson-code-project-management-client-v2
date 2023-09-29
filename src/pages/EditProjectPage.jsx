@@ -1,71 +1,65 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const API_URL = "http://localhost:5005";
+const API_URL = 'http://localhost:5005';
 
 function EditProjectPage(props) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  
-  const { projectId } = useParams();
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   const navigate = useNavigate();
-  
+  const { projectId } = useParams();
+
   useEffect(() => {
+    // Get the token from the localStorage
+    const storedToken = localStorage.getItem('authToken');
+
+    // Send the token through the request "Authorization" Headers
     axios
-      .get(`${API_URL}/api/projects/${projectId}`)
+      .get(`${API_URL}/api/projects/${projectId}`, { headers: { Authorization: `Bearer ${storedToken}` } })
       .then((response) => {
         const oneProject = response.data;
         setTitle(oneProject.title);
         setDescription(oneProject.description);
       })
       .catch((error) => console.log(error));
-    
   }, [projectId]);
-  
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const requestBody = { title, description };
 
-    axios
-      .put(`${API_URL}/api/projects/${projectId}`, requestBody)
-      .then((response) => {
-        navigate(`/projects/${projectId}`)
-      });
-  };
-  
-  
-  const deleteProject = () => {
-    
-    axios
-      .delete(`${API_URL}/api/projects/${projectId}`)
-      .then(() => {
-        navigate("/projects");
-      })
-      .catch((err) => console.log(err));
-  };  
+    // Get the token from the localStorage
+    const storedToken = localStorage.getItem('authToken');
 
-  
+    // Send the token through the request "Authorization" Headers
+    axios.put(`${API_URL}/api/projects/${projectId}`, requestBody, { headers: { Authorization: `Bearer ${storedToken}` } }).then((response) => {
+      navigate(`/projects/${projectId}`);
+    });
+  };
+
+  const deleteProject = () => {
+    // Get the token from the localStorage
+    const storedToken = localStorage.getItem('authToken');
+
+    // Send the token through the request "Authorization" Headers
+    axios
+      .delete(`${API_URL}/api/projects/${projectId}`, { headers: { Authorization: `Bearer ${storedToken}` } })
+      .then(() => navigate('/projects'))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="EditProjectPage">
       <h3>Edit the Project</h3>
 
       <form onSubmit={handleFormSubmit}>
         <label>Title:</label>
-        <input
-          type="text"
-          name="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        
+        <input type="text" name="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+
         <label>Description:</label>
-        <textarea
-          name="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+        <textarea name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
 
         <button type="submit">Update Project</button>
       </form>
