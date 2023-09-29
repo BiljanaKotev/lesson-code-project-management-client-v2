@@ -22,8 +22,7 @@ function App() {
           path="/projects"
           element={
             <IsPrivate>
-              {' '}
-              <ProjectListPage />{' '}
+              <ProjectListPage />
             </IsPrivate>
           }
         />
@@ -32,8 +31,7 @@ function App() {
           path="/projects/:projectId"
           element={
             <IsPrivate>
-              {' '}
-              <ProjectDetailsPage />{' '}
+              <ProjectDetailsPage />
             </IsPrivate>
           }
         />
@@ -43,7 +41,7 @@ function App() {
           element={
             <IsPrivate>
               {' '}
-              <EditProjectPage />{' '}
+              <EditProjectPage />
             </IsPrivate>
           }
         />
@@ -52,8 +50,7 @@ function App() {
           path="/signup"
           element={
             <IsAnon>
-              {' '}
-              <SignupPage />{' '}
+              <SignupPage />
             </IsAnon>
           }
         />
@@ -61,8 +58,7 @@ function App() {
           path="/login"
           element={
             <IsAnon>
-              {' '}
-              <LoginPage />{' '}
+              <LoginPage />
             </IsAnon>
           }
         />
